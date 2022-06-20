@@ -1,0 +1,18 @@
+# Create configmaps
+create namespace first 
+
+kubectl create ns aptos
+
+apply configmaps
+kubectl create configmap genesis --from-file=/home/aptos-core/k8s/genesis.blob -n aptos
+kubectl create configmap waypoint --from-file=/home/aptos-core/k8s/waypoint.txt -n aptos
+kubectl create configmap node --from-file=/home/aptos-core/k8s/node.yaml -n aptos
+
+
+
+create mayastor pvc 
+
+kubectl apply -f /home/aptos-core/k8s/aptos-pvc.yaml -n aptos
+
+deploy pod
+kubectl apply -f /home/aptos-core/k8s/aptos-core.yaml -n aptos

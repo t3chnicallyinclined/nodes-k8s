@@ -1,0 +1,27 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: aptos
+spec:
+  nodeSelector:
+    openebs.io/engine: mayastor
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: aptos-data
+    - name: config
+      configMap:
+        name: aptos-config
+  containers:
+    - name: aptos
+      image: aptoslabs/validator:devnet
+      command: ["/opt/aptos/bin/aptos-node", "-f", "/opt/aptos/etc/node.yaml"]
+      volumeMounts:
+        - name: data
+          mountPath: "/opt/aptos/data"
+        - name: config
+          mountPath: "/opt/aptos/etc/"
+          readOnly: true
+      ports:
+        - containerPort: 8080
+        - containerPort: 9101
