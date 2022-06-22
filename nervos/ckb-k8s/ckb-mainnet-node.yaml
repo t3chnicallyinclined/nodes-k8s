@@ -1,0 +1,21 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: ckb-mainnet
+spec:
+  nodeSelector:
+    openebs.io/engine: mayastor
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: ckb-mainnet
+  containers:
+    - name: ckb-testnet
+      image: nervos/ckb:latest
+      command: ["ckb", "init", "--chain","mainnet" ]
+      volumeMounts:
+        - name: data
+          mountPath: "/var/lib/ckb"
+      ports:
+        - containerPort: 8080
+        - containerPort: 9101

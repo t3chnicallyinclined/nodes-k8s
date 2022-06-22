@@ -1,0 +1,27 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: ckb
+spec:
+  nodeSelector:
+    openebs.io/engine: mayastor
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: ckb-mainnet
+    - name: config
+      configMap:
+        name: aptos-config
+  containers:
+    - name: ckb
+      image: nervos/ckb:latest
+      command: ["run"]
+      volumeMounts:
+        - name: data
+          mountPath: "/var/lib/ckb"
+        - name: config
+          mountPath: "/opt/aptos/etc/"
+          readOnly: true
+      ports:
+        - containerPort: 8080
+        - containerPort: 9101
